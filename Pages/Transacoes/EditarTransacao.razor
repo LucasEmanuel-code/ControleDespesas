@@ -2,6 +2,7 @@
 @using System.Net.Http.Json
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
+@inject MudBlazor.ISnackbar Snackbar
 
 @code {
     [Parameter]
@@ -23,12 +24,13 @@
         var res = await Http.PutAsJsonAsync($"/api/Transacoes/{Id}", transacao);
         if (res.IsSuccessStatusCode)
         {
+            Snackbar.Add("Transação atualizada com sucesso.", MudBlazor.Severity.Success);
             NavigationManager.NavigateTo("/transacoes");
         }
         else
         {
             var text = await res.Content.ReadAsStringAsync();
-            await JS.InvokeVoidAsync("alert", "Erro: " + text);
+            Snackbar.Add("Erro: " + text, MudBlazor.Severity.Error);
         }
     }
 

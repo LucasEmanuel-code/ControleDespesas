@@ -2,6 +2,7 @@
 @using System.Net.Http.Json
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
+@inject MudBlazor.ISnackbar Snackbar
 
 <h3>Transações</h3>
 
@@ -67,10 +68,11 @@ else
         {
             transacoes = transacoes?.Where(t => t.Id != id).ToList();
             StateHasChanged();
+            Snackbar.Add("Transação excluída com sucesso.", MudBlazor.Severity.Success);
         }
         else
         {
-            await ShowAlert("Erro ao excluir transação.");
+            Snackbar.Add("Erro ao excluir transação.", MudBlazor.Severity.Error);
         }
     }
 
@@ -78,7 +80,7 @@ else
     private IJSRuntime JS { get; set; } = default!;
 
     async Task<bool> JSConfirm(string message) => await JS.InvokeAsync<bool>("confirm", message);
-    async Task ShowAlert(string message) => await JS.InvokeVoidAsync("alert", message);
+    // Keep JSConfirm for deletion confirmation, but use MudBlazor Snackbar for feedback
 
     class TransacaoDto { public int Id { get; set; } public decimal Valor { get; set; } public DateTime Data { get; set; } public string? Tipo { get; set; } public int CategoriaId { get; set; } public string? CategoriaNome { get; set; } public int UsuarioId { get; set; } public string? UsuarioEmail { get; set; } public string? Descricao { get; set; } }
 }

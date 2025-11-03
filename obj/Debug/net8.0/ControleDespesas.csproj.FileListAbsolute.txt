@@ -138,3 +138,13 @@ C:\Users\sandr\OneDrive\Área de Trabalho\Lucas\ControleDespesas\ControleDespesa
 C:\Users\sandr\OneDrive\Área de Trabalho\Lucas\ControleDespesas\ControleDespesas\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\sandr\OneDrive\Área de Trabalho\Lucas\ControleDespesas\ControleDespesas\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\Users\sandr\OneDrive\Área de Trabalho\Lucas\ControleDespesas\ControleDespesas\obj\Debug\net8.0\ControleDespesas.MvcApplicationPartsAssemblyInfo.cs
+c:\Users\sandr\OneDrive\Área de Trabalho\Lucas\ControleDespesas\ControleDespesas\obj\Debug\net8.0\ControleDespesas.sourcelink.json
+c:\Users\sandr\OneDrive\Área de Trabalho\Lucas\ControleDespesas\ControleDespesas\bin\Debug\net8.0\Microsoft.AspNetCore.Authorization.dll
+c:\Users\sandr\OneDrive\Área de Trabalho\Lucas\ControleDespesas\ControleDespesas\bin\Debug\net8.0\Microsoft.AspNetCore.Components.dll
+c:\Users\sandr\OneDrive\Área de Trabalho\Lucas\ControleDespesas\ControleDespesas\bin\Debug\net8.0\Microsoft.AspNetCore.Components.Forms.dll
+c:\Users\sandr\OneDrive\Área de Trabalho\Lucas\ControleDespesas\ControleDespesas\bin\Debug\net8.0\Microsoft.AspNetCore.Components.Web.dll
+c:\Users\sandr\OneDrive\Área de Trabalho\Lucas\ControleDespesas\ControleDespesas\bin\Debug\net8.0\Microsoft.AspNetCore.Metadata.dll
+c:\Users\sandr\OneDrive\Área de Trabalho\Lucas\ControleDespesas\ControleDespesas\bin\Debug\net8.0\Microsoft.Extensions.Localization.dll
+c:\Users\sandr\OneDrive\Área de Trabalho\Lucas\ControleDespesas\ControleDespesas\bin\Debug\net8.0\Microsoft.Extensions.Localization.Abstractions.dll
+c:\Users\sandr\OneDrive\Área de Trabalho\Lucas\ControleDespesas\ControleDespesas\bin\Debug\net8.0\Microsoft.JSInterop.dll
+c:\Users\sandr\OneDrive\Área de Trabalho\Lucas\ControleDespesas\ControleDespesas\bin\Debug\net8.0\MudBlazor.dll

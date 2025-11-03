@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "8ZXu6PQ2X4ddglaPnc48/9MSgfqcU7Ojk+xzRR1pZLc=",
+  "Hash": "bCGyCan1Xucg0BRqIsJPfRQziySTJ8O74DGIxS5r4P8=",
   "Source": "ControleDespesas",
   "BasePath": "_content/ControleDespesas",
   "Mode": "Default",
@@ -16,6 +16,44 @@
     }
   ],
   "Assets": [
+    {
+      "Identity": "C:\\Users\\sandr\\.nuget\\packages\\mudblazor\\7.2.0\\staticwebassets\\MudBlazor.min.css",
+      "SourceId": "MudBlazor",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\sandr\\.nuget\\packages\\mudblazor\\7.2.0\\staticwebassets\\",
+      "BasePath": "_content/MudBlazor",
+      "RelativePath": "MudBlazor.min.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\sandr\\.nuget\\packages\\mudblazor\\7.2.0\\staticwebassets\\MudBlazor.min.css"
+    },
+    {
+      "Identity": "C:\\Users\\sandr\\.nuget\\packages\\mudblazor\\7.2.0\\staticwebassets\\MudBlazor.min.js",
+      "SourceId": "MudBlazor",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\sandr\\.nuget\\packages\\mudblazor\\7.2.0\\staticwebassets\\",
+      "BasePath": "_content/MudBlazor",
+      "RelativePath": "MudBlazor.min.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\sandr\\.nuget\\packages\\mudblazor\\7.2.0\\staticwebassets\\MudBlazor.min.js"
+    },
     {
       "Identity": "C:\\Users\\sandr\\OneDrive\\Área de Trabalho\\Lucas\\ControleDespesas\\ControleDespesas\\obj\\Debug\\net8.0\\scopedcss\\bundle\\ControleDespesas.styles.css",
       "SourceId": "ControleDespesas",

@@ -1,7 +1,10 @@
 @page "/categorias/criar"
 @using System.Net.Http.Json
+@using ControleDespesas.Models
+@using MudBlazor
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
 
 <h3>Criar Categoria</h3>
 
@@ -36,33 +39,48 @@
 </EditForm>
 
 @code {
-    CategoriaDto categoria = new();
-    List<UsuarioDto>? usuarios;
+    private Categoria categoria = new();
+    private List<Usuario>? usuarios;
 
     protected override async Task OnInitializedAsync()
     {
-        usuarios = await Http.GetFromJsonAsync<List<UsuarioDto>>("/api/Usuario");
+        try 
+        {
+            usuarios = await Http.GetFromJsonAsync<List<Usuario>>("api/Usuario");
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Erro ao carregar usuários: {ex.Message}", Severity.Error);
+        }
     }
 
-    async Task HandleValidSubmit()
+    private async Task HandleValidSubmit()
     {
-        var res = await Http.PostAsJsonAsync("/api/Categoria", categoria);
-        if (res.IsSuccessStatusCode)
+        if (categoria.UsuarioId == 0)
         {
-            NavigationManager.NavigateTo("/categorias");
+            Snackbar.Add("Por favor, selecione um usuário", Severity.Warning);
+            return;
         }
-        else
+
+        try 
         {
-            var text = await res.Content.ReadAsStringAsync();
-            await JS.InvokeVoidAsync("alert", "Erro: " + text);
+            var res = await Http.PostAsJsonAsync("api/Categoria", categoria);
+            if (res.IsSuccessStatusCode)
+            {
+                Snackbar.Add("Categoria criada com sucesso.", Severity.Success);
+                NavigationManager.NavigateTo("/categorias");
+            }
+            else
+            {
+                var errorText = await res.Content.ReadAsStringAsync();
+                Snackbar.Add($"Erro ao criar categoria: {errorText}", Severity.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Erro ao criar categoria: {ex.Message}", Severity.Error);
         }
     }
 
-    void Cancel() => NavigationManager.NavigateTo("/categorias");
-
-    [Inject]
-    private IJSRuntime JS { get; set; } = default!;
-
-    class CategoriaDto { public int Id { get; set; } public string Nome { get; set; } = string.Empty; public string Descricao { get; set; } = string.Empty; public int UsuarioId { get; set; } }
-    class UsuarioDto { public int Id { get; set; } public string Nome { get; set; } = string.Empty; public string Email { get; set; } = string.Empty; }
+    private void Cancel() => NavigationManager.NavigateTo("/categorias");
 }

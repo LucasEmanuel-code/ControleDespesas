@@ -33,6 +33,12 @@ public class CategoriaController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Categoria>> PostCategoria(Categoria categoria)
     {
+        if (!await _context.Usuarios.AnyAsync(u => u.Id == categoria.UsuarioId))
+        {
+            ModelState.AddModelError("UsuarioId", "Usuário não encontrado");
+            return BadRequest(ModelState);
+        }
+
         _context.Categorias.Add(categoria);
         await _context.SaveChangesAsync();
         return CreatedAtAction(nameof(GetCategoria), new { id = categoria.Id }, categoria);

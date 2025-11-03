@@ -3,6 +3,7 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
+@inject MudBlazor.ISnackbar Snackbar
 <h3>Categorias</h3>
 
 <button class="btn btn-primary mb-3" @onclick="Create">Criar nova categoria</button>
@@ -62,10 +63,12 @@ else
         {
             categorias = categorias?.Where(u => u.Id != id).ToList();
             StateHasChanged();
+            Snackbar.Add("Categoria excluída com sucesso.", MudBlazor.Severity.Success);
         }
         else
         {
-            await ShowAlert("Erro ao excluir categoria.");
+            var errorText = await res.Content.ReadAsStringAsync();
+            Snackbar.Add($"Erro ao excluir categoria: {errorText}", MudBlazor.Severity.Error);
         }
     }
 

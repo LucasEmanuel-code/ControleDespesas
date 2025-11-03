@@ -1,5 +1,7 @@
 using ControleDespesas.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using MudBlazor;
+using MudBlazor.Services;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -40,6 +42,15 @@ builder.Services.AddAuthorization();
 // Swagger: registrar gerador e explorer de endpoints
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// MudBlazor services (Snackbar/toasts)
+builder.Services.AddMudServices(config =>
+{
+    config.SnackbarConfiguration.PreventDuplicates = false;
+    config.SnackbarConfiguration.NewestOnTop = true;
+    config.SnackbarConfiguration.ShowCloseIcon = true;
+    config.SnackbarConfiguration.VisibleStateDuration = 3000;
+});
 
 var app = builder.Build();
 
