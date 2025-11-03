@@ -1,0 +1,42 @@
+@page "/usuarios/detalhes/{Id:int}"
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    UsuarioDto? usuario;
+
+    protected override async Task OnInitializedAsync()
+    {
+        usuario = await Http.GetFromJsonAsync<UsuarioDto>($"/api/Usuario/{Id}");
+    }
+
+    void Back() => NavigationManager.NavigateTo("/usuarios");
+
+    class UsuarioDto { public int Id { get; set; } public string Nome { get; set; } = string.Empty; public string Email { get; set; } = string.Empty; }
+}
+
+<h3>Detalhes do Usuário</h3>
+
+@if (usuario == null)
+{
+    <p>Carregando...</p>
+}
+else
+{
+    <dl class="row">
+        <dt class="col-sm-2">Id</dt>
+        <dd class="col-sm-10">@usuario.Id</dd>
+
+        <dt class="col-sm-2">Nome</dt>
+        <dd class="col-sm-10">@usuario.Nome</dd>
+
+        <dt class="col-sm-2">Email</dt>
+        <dd class="col-sm-10">@usuario.Email</dd>
+    </dl>
+
+    <button class="btn btn-secondary" @onclick="Back">Voltar</button>
+}

@@ -1,0 +1,60 @@
+@page "/usuarios/editar/{Id:int}"
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    UsuarioDto usuario = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        usuario = await Http.GetFromJsonAsync<UsuarioDto>($"/api/Usuario/{Id}") ?? new UsuarioDto();
+    }
+
+    async Task HandleValidSubmit()
+    {
+        var res = await Http.PutAsJsonAsync($"/api/Usuario/{Id}", usuario);
+        if (res.IsSuccessStatusCode)
+        {
+            NavigationManager.NavigateTo("/usuarios");
+        }
+        else
+        {
+            var text = await res.Content.ReadAsStringAsync();
+            await JS.InvokeVoidAsync("alert", "Erro: " + text);
+        }
+    }
+
+    void Cancel() => NavigationManager.NavigateTo("/usuarios");
+
+    [Inject]
+    private IJSRuntime JS { get; set; } = default!;
+
+    class UsuarioDto { public int Id { get; set; } public string Nome { get; set; } = string.Empty; public string Email { get; set; } = string.Empty; public string Senha { get; set; } = string.Empty; }
+}
+
+<h3>Editar Usuário</h3>
+
+<EditForm Model="usuario" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label class="form-label">Nome</label>
+        <InputText class="form-control" @bind-Value="usuario.Nome" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        <InputText class="form-control" @bind-Value="usuario.Email" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Senha (deixe em branco para manter)</label>
+        <InputText type="password" class="form-control" @bind-Value="usuario.Senha" />
+    </div>
+
+    <button class="btn btn-primary" type="submit">Salvar</button>
+    <button class="btn btn-secondary ms-2" type="button" @onclick="Cancel">Cancelar</button>
+</EditForm>

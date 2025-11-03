@@ -1,0 +1,54 @@
+@page "/transacoes/detalhes/{Id:int}"
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    TransacaoDto? transacao;
+
+    protected override async Task OnInitializedAsync()
+    {
+        transacao = await Http.GetFromJsonAsync<TransacaoDto>($"/api/Transacoes/{Id}");
+    }
+
+    void Back() => NavigationManager.NavigateTo("/transacoes");
+
+    class TransacaoDto { public int Id { get; set; } public decimal Valor { get; set; } public DateTime Data { get; set; } public string? Tipo { get; set; } public string? Descricao { get; set; } public int UsuarioId { get; set; } public string? UsuarioEmail { get; set; } public int CategoriaId { get; set; } public string? CategoriaNome { get; set; } }
+}
+
+<h3>Detalhes da Transação</h3>
+
+@if (transacao == null)
+{
+    <p>Carregando...</p>
+}
+else
+{
+    <dl class="row">
+        <dt class="col-sm-2">Id</dt>
+        <dd class="col-sm-10">@transacao.Id</dd>
+
+        <dt class="col-sm-2">Valor</dt>
+        <dd class="col-sm-10">@transacao.Valor.ToString("C")</dd>
+
+        <dt class="col-sm-2">Data</dt>
+        <dd class="col-sm-10">@transacao.Data.ToString("yyyy-MM-dd")</dd>
+
+        <dt class="col-sm-2">Tipo</dt>
+        <dd class="col-sm-10">@transacao.Tipo</dd>
+
+        <dt class="col-sm-2">Descrição</dt>
+        <dd class="col-sm-10">@transacao.Descricao</dd>
+
+        <dt class="col-sm-2">Categoria</dt>
+        <dd class="col-sm-10">@transacao.CategoriaNome</dd>
+
+        <dt class="col-sm-2">Usuário</dt>
+        <dd class="col-sm-10">@transacao.UsuarioEmail</dd>
+    </dl>
+
+    <button class="btn btn-secondary" @onclick="Back">Voltar</button>
+}

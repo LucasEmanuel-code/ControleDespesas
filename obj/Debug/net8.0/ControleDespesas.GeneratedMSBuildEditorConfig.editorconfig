@@ -1,0 +1,119 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = ControleDespesas
+build_property.RootNamespace = ControleDespesas
+build_property.ProjectDir = C:\Users\sandr\OneDrive\Área de Trabalho\Lucas\ControleDespesas\ControleDespesas\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\sandr\OneDrive\Área de Trabalho\Lucas\ControleDespesas\ControleDespesas
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/App.razor]
+build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Pages/Categorias/CriarCategoria.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2F0ZWdvcmlhc1xDcmlhckNhdGVnb3JpYS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Pages/Categorias/DetalhesCategoria.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2F0ZWdvcmlhc1xEZXRhbGhlc0NhdGVnb3JpYS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Pages/Categorias/EditarCategoria.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2F0ZWdvcmlhc1xFZGl0YXJDYXRlZ29yaWEucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Pages/Categorias/ListarCategorias.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2F0ZWdvcmlhc1xMaXN0YXJDYXRlZ29yaWFzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Pages/Counter.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ291bnRlci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Pages/Edição.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRWRpw6fDo28ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Pages/Index.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Pages/Register.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVnaXN0ZXIucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Pages/Transacoes/CriarTransacao.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVHJhbnNhY29lc1xDcmlhclRyYW5zYWNhby5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Pages/Transacoes/DetalhesTransacao.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVHJhbnNhY29lc1xEZXRhbGhlc1RyYW5zYWNhby5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Pages/Transacoes/EditarTransacao.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVHJhbnNhY29lc1xFZGl0YXJUcmFuc2FjYW8ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Pages/Transacoes/ListarTransacoes.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVHJhbnNhY29lc1xMaXN0YXJUcmFuc2Fjb2VzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Pages/Usuarios/CriarUsuario.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXN1YXJpb3NcQ3JpYXJVc3VhcmlvLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Pages/Usuarios/DetalhesUsuario.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXN1YXJpb3NcRGV0YWxoZXNVc3VhcmlvLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Pages/Usuarios/EditarUsuario.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXN1YXJpb3NcRWRpdGFyVXN1YXJpby5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Pages/Usuarios/ListarUsuarios.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXN1YXJpb3NcTGlzdGFyVXN1YXJpb3MucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Shared/SurveyPrompt.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFN1cnZleVByb21wdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Shared/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-gagd9i61gr
+
+[C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Shared/NavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE5hdk1lbnUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-4pn6k0a9q8
+
+[C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Pages/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Pages/_Host.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX0hvc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 

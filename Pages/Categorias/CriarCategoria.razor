@@ -1,0 +1,68 @@
+@page "/categorias/criar"
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<h3>Criar Categoria</h3>
+
+<EditForm Model="categoria" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label class="form-label">Nome</label>
+        <InputText class="form-control" @bind-Value="categoria.Nome" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Descrição</label>
+        <InputText class="form-control" @bind-Value="categoria.Descricao" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Usuário</label>
+        <select class="form-select" @bind="categoria.UsuarioId">
+            <option value="">-- selecione --</option>
+            @if (usuarios != null)
+            {
+                @foreach (var u in usuarios)
+                {
+                    <option value="@u.Id">@u.Nome (@u.Email)</option>
+                }
+            }
+        </select>
+    </div>
+
+    <button class="btn btn-primary" type="submit">Criar</button>
+    <button class="btn btn-secondary ms-2" type="button" @onclick="Cancel">Cancelar</button>
+</EditForm>
+
+@code {
+    CategoriaDto categoria = new();
+    List<UsuarioDto>? usuarios;
+
+    protected override async Task OnInitializedAsync()
+    {
+        usuarios = await Http.GetFromJsonAsync<List<UsuarioDto>>("/api/Usuario");
+    }
+
+    async Task HandleValidSubmit()
+    {
+        var res = await Http.PostAsJsonAsync("/api/Categoria", categoria);
+        if (res.IsSuccessStatusCode)
+        {
+            NavigationManager.NavigateTo("/categorias");
+        }
+        else
+        {
+            var text = await res.Content.ReadAsStringAsync();
+            await JS.InvokeVoidAsync("alert", "Erro: " + text);
+        }
+    }
+
+    void Cancel() => NavigationManager.NavigateTo("/categorias");
+
+    [Inject]
+    private IJSRuntime JS { get; set; } = default!;
+
+    class CategoriaDto { public int Id { get; set; } public string Nome { get; set; } = string.Empty; public string Descricao { get; set; } = string.Empty; public int UsuarioId { get; set; } }
+    class UsuarioDto { public int Id { get; set; } public string Nome { get; set; } = string.Empty; public string Email { get; set; } = string.Empty; }
+}

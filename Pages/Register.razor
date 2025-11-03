@@ -1,0 +1,64 @@
+@using System.ComponentModel.DataAnnotations;
+@using Microsoft.AspNetCore.Components.Forms;
+@using Microsoft.AspNetCore.Identity;
+@using System.Windows.Input;
+@page "/register";
+
+<h1>Register</h1>
+    <div class="row">
+        <div class = "col-md-4">
+            <section>
+                <EditForm Model="Input" OnValidSubmit="RegisterUser">
+                    <DataAnnotationsValidator />
+                        <hr />
+                        <div class = "form-floating mb-3">
+                            <InputText @bind-Value="Input.Email" class="form-control" id="email" placeholder="Email" />
+                            <label for="email" class = "form-label">Email</label>
+                            <ValidationMessage For="@(() => Input.Email)" class = "text-danger" />
+                        </div>
+                        <div class="form-floating mb-3">
+                            <InputText @bind-Value="Input.Password" type="password" class="form-control" id="password" placeholder="Password" />
+                            <label for="password" class = "form-label">Password</label>
+                            <ValidationMessage For="@(() => Input.Password)" class = "text-danger" />
+                        </div>
+                        <div class="form-floating mb-3">
+                            <InputSelect class = "form-select" @bind-Value="Input.Role" aria-required="true">
+                                <option value="DefaultUser">DefaultUserser</option>
+                                <option value="Admin">Admin</option>
+                            </InputSelect>
+                            <label for="role" class = "form-label">Role</label>
+                            <ValidationMessage For="@(() => Input.Role)" class = "text-danger" />
+                        </div>
+                        <div>
+                            <button type = "submit" class = "m-100 btn btn-lg btn-primary">Register</button>
+                        </div>
+                </EditForm>
+            </section>
+        </div>
+    </div>
+
+@code {
+    // simple backing model for the EditForm
+    [SupplyParameterFromForm]
+    private RegisterInput Input { get; set; } = new ();
+
+    public void RegisterUser()
+    {
+    
+    }
+
+    public class RegisterInput
+    {
+        [Required]
+        [EmailAddress]
+        public string? Email { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        public string? Password { get; set; }
+
+        [Required]
+        [DataType(DataType.Text)]
+        public string? Role { get; set; }
+    }
+}

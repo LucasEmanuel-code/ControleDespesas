@@ -1,0 +1,45 @@
+@page "/categorias/detalhes/{Id:int}"
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    CategoriaDto? categoria;
+
+    protected override async Task OnInitializedAsync()
+    {
+        categoria = await Http.GetFromJsonAsync<CategoriaDto>($"/api/Categoria/{Id}");
+    }
+
+    void Back() => NavigationManager.NavigateTo("/categorias");
+
+    class CategoriaDto { public int Id { get; set; } public string Nome { get; set; } = string.Empty; public string Descricao { get; set; } = string.Empty; public int UsuarioId { get; set; } }
+}
+
+<h3>Detalhes da Categoria</h3>
+
+@if (categoria == null)
+{
+    <p>Carregando...</p>
+}
+else
+{
+    <dl class="row">
+        <dt class="col-sm-2">Id</dt>
+        <dd class="col-sm-10">@categoria.Id</dd>
+
+        <dt class="col-sm-2">Nome</dt>
+        <dd class="col-sm-10">@categoria.Nome</dd>
+
+        <dt class="col-sm-2">Descrição</dt>
+        <dd class="col-sm-10">@categoria.Descricao</dd>
+
+        <dt class="col-sm-2">UsuarioId</dt>
+        <dd class="col-sm-10">@categoria.UsuarioId</dd>
+    </dl>
+
+    <button class="btn btn-secondary" @onclick="Back">Voltar</button>
+}

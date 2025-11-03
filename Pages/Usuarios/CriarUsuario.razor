@@ -1,0 +1,53 @@
+@page "/usuarios/criar"
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<h3>Criar Usuário</h3>
+
+<EditForm Model="usuario" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label class="form-label">Nome</label>
+        <InputText class="form-control" @bind-Value="usuario.Nome" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        <InputText class="form-control" @bind-Value="usuario.Email" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Senha</label>
+        <InputText type="password" class="form-control" @bind-Value="usuario.Senha" />
+    </div>
+
+    <button class="btn btn-primary" type="submit">Criar</button>
+    <button class="btn btn-secondary ms-2" type="button" @onclick="Cancel">Cancelar</button>
+</EditForm>
+
+@code {
+    UsuarioDto usuario = new();
+
+    async Task HandleValidSubmit()
+    {
+        var res = await Http.PostAsJsonAsync("/api/Usuario", usuario);
+        if (res.IsSuccessStatusCode)
+        {
+            NavigationManager.NavigateTo("/usuarios");
+        }
+        else
+        {
+            // opcional: ler mensagem de erro
+            var text = await res.Content.ReadAsStringAsync();
+            await JS.InvokeVoidAsync("alert", "Erro: " + text);
+        }
+    }
+
+    void Cancel() => NavigationManager.NavigateTo("/usuarios");
+
+    [Inject]
+    private IJSRuntime JS { get; set; } = default!;
+
+    class UsuarioDto { public int Id { get; set; } public string Nome { get; set; } = string.Empty; public string Email { get; set; } = string.Empty; public string Senha { get; set; } = string.Empty; }
+}

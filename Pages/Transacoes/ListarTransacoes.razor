@@ -1,0 +1,84 @@
+@page "/transacoes"
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<h3>Transações</h3>
+
+<button class="btn btn-primary mb-3" @onclick="Create">Nova Transação</button>
+
+@if (transacoes is null)
+{
+    <p>Carregando...</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Valor</th>
+                <th>Data</th>
+                <th>Tipo</th>
+                <th>Categoria</th>
+                <th>Usuário</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var t in transacoes)
+            {
+                <tr>
+                    <td>@t.Id</td>
+                    <td>@t.Valor.ToString("C")</td>
+                    <td>@t.Data.ToString("yyyy-MM-dd")</td>
+                    <td>@t.Tipo</td>
+                    <td>@t.CategoriaNome</td>
+                    <td>@t.UsuarioEmail</td>
+                    <td>
+                        <button class="btn btn-sm btn-info me-1" @onclick="() => Details(t.Id)">Detalhes</button>
+                        <button class="btn btn-sm btn-warning me-1" @onclick="() => Edit(t.Id)">Editar</button>
+                        <button class="btn btn-sm btn-danger" @onclick="() => Delete(t.Id)">Excluir</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    List<TransacaoDto>? transacoes;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Using API that returns transactions with included usuario/email and categoria/nome
+        transacoes = await Http.GetFromJsonAsync<List<TransacaoDto>>("/api/Transacoes");
+    }
+
+    void Create() => NavigationManager.NavigateTo("/transacoes/criar");
+    void Edit(int id) => NavigationManager.NavigateTo($"/transacoes/editar/{id}");
+    void Details(int id) => NavigationManager.NavigateTo($"/transacoes/detalhes/{id}");
+
+    async Task Delete(int id)
+    {
+        if (!await JSConfirm($"Excluir transação {id}?")) return;
+        var res = await Http.DeleteAsync($"/api/Transacoes/{id}");
+        if (res.IsSuccessStatusCode)
+        {
+            transacoes = transacoes?.Where(t => t.Id != id).ToList();
+            StateHasChanged();
+        }
+        else
+        {
+            await ShowAlert("Erro ao excluir transação.");
+        }
+    }
+
+    [Inject]
+    private IJSRuntime JS { get; set; } = default!;
+
+    async Task<bool> JSConfirm(string message) => await JS.InvokeAsync<bool>("confirm", message);
+    async Task ShowAlert(string message) => await JS.InvokeVoidAsync("alert", message);
+
+    class TransacaoDto { public int Id { get; set; } public decimal Valor { get; set; } public DateTime Data { get; set; } public string? Tipo { get; set; } public int CategoriaId { get; set; } public string? CategoriaNome { get; set; } public int UsuarioId { get; set; } public string? UsuarioEmail { get; set; } public string? Descricao { get; set; } }
+}

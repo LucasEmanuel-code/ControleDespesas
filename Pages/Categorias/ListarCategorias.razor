@@ -1,0 +1,79 @@
+@page "/categorias"
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<h3>Categorias</h3>
+
+<button class="btn btn-primary mb-3" @onclick="Create">Criar nova categoria</button>
+
+@if (categorias is null)
+{
+    <p>Carregando...</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>UsuárioId</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var c in categorias)
+            {
+                <tr>
+                    <td>@c.Id</td>
+                    <td>@c.Nome</td>
+                    <td>@c.Descricao</td>
+                    <td>@c.UsuarioId</td>
+                    <td>
+                        <button class="btn btn-sm btn-info me-1" @onclick="() => Details(c.Id)">Detalhes</button>
+                        <button class="btn btn-sm btn-warning me-1" @onclick="() => Edit(c.Id)">Editar</button>
+                        <button class="btn btn-sm btn-danger" @onclick="() => Delete(c.Id)">Excluir</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    List<CategoriaDto>? categorias;
+
+    protected override async Task OnInitializedAsync()
+    {
+        categorias = await Http.GetFromJsonAsync<List<CategoriaDto>>("/api/Categoria");
+    }
+
+    void Create() => NavigationManager.NavigateTo("/categorias/criar");
+    void Edit(int id) => NavigationManager.NavigateTo($"/categorias/editar/{id}");
+    void Details(int id) => NavigationManager.NavigateTo($"/categorias/detalhes/{id}");
+
+    async Task Delete(int id)
+    {
+        if (!await JSConfirm($"Excluir categoria {id}?")) return;
+        var res = await Http.DeleteAsync($"/api/Categoria/{id}");
+        if (res.IsSuccessStatusCode)
+        {
+            categorias = categorias?.Where(u => u.Id != id).ToList();
+            StateHasChanged();
+        }
+        else
+        {
+            await ShowAlert("Erro ao excluir categoria.");
+        }
+    }
+
+    [Inject]
+    private IJSRuntime JS { get; set; } = default!;
+
+    async Task<bool> JSConfirm(string message) => await JS.InvokeAsync<bool>("confirm", message);
+    async Task ShowAlert(string message) => await JS.InvokeVoidAsync("alert", message);
+
+    class CategoriaDto { public int Id { get; set; } public string Nome { get; set; } = string.Empty; public string Descricao { get; set; } = string.Empty; public int UsuarioId { get; set; } }
+}

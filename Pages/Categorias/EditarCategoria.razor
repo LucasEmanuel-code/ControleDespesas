@@ -1,0 +1,72 @@
+@page "/categorias/editar/{Id:int}"
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    CategoriaDto categoria = new();
+    List<UsuarioDto>? usuarios;
+
+    protected override async Task OnInitializedAsync()
+    {
+        categoria = await Http.GetFromJsonAsync<CategoriaDto>($"/api/Categoria/{Id}") ?? new CategoriaDto();
+        usuarios = await Http.GetFromJsonAsync<List<UsuarioDto>>("/api/Usuario");
+    }
+
+    async Task HandleValidSubmit()
+    {
+        var res = await Http.PutAsJsonAsync($"/api/Categoria/{Id}", categoria);
+        if (res.IsSuccessStatusCode)
+        {
+            NavigationManager.NavigateTo("/categorias");
+        }
+        else
+        {
+            var text = await res.Content.ReadAsStringAsync();
+            await JS.InvokeVoidAsync("alert", "Erro: " + text);
+        }
+    }
+
+    void Cancel() => NavigationManager.NavigateTo("/categorias");
+
+    [Inject]
+    private IJSRuntime JS { get; set; } = default!;
+
+    class CategoriaDto { public int Id { get; set; } public string Nome { get; set; } = string.Empty; public string Descricao { get; set; } = string.Empty; public int UsuarioId { get; set; } }
+    class UsuarioDto { public int Id { get; set; } public string Nome { get; set; } = string.Empty; public string Email { get; set; } = string.Empty; }
+}
+
+<h3>Editar Categoria</h3>
+
+<EditForm Model="categoria" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label class="form-label">Nome</label>
+        <InputText class="form-control" @bind-Value="categoria.Nome" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Descrição</label>
+        <InputText class="form-control" @bind-Value="categoria.Descricao" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Usuário</label>
+        <select class="form-select" @bind="categoria.UsuarioId">
+            <option value="">-- selecione --</option>
+            @if (usuarios != null)
+            {
+                @foreach (var u in usuarios)
+                {
+                    <option value="@u.Id">@u.Nome (@u.Email)</option>
+                }
+            }
+        </select>
+    </div>
+
+    <button class="btn btn-primary" type="submit">Salvar</button>
+    <button class="btn btn-secondary ms-2" type="button" @onclick="Cancel">Cancelar</button>
+</EditForm>
