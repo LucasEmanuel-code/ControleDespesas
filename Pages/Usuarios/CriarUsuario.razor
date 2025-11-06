@@ -2,6 +2,7 @@
 @using System.Net.Http.Json
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
+@inject MudBlazor.ISnackbar Snackbar
 
 <h3>Criar Usuário</h3>
 
@@ -34,13 +35,14 @@
         var res = await Http.PostAsJsonAsync("/api/Usuario", usuario);
         if (res.IsSuccessStatusCode)
         {
+            Snackbar.Add("Usuário criado com sucesso!", MudBlazor.Severity.Success);
             NavigationManager.NavigateTo("/usuarios");
         }
         else
         {
             // opcional: ler mensagem de erro
             var text = await res.Content.ReadAsStringAsync();
-            await JS.InvokeVoidAsync("alert", "Erro: " + text);
+            Snackbar.Add("Erro: " + text, MudBlazor.Severity.Error);
         }
     }
 

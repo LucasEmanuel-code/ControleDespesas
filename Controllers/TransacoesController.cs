@@ -35,26 +35,67 @@ public class TransacoesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<TransacaoDto>>> GetTransacoes()
+    public async Task<ActionResult<IEnumerable<TransacaoDto>>> GetTransacoes([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate, [FromQuery] int? categoriaId)
     {
-        var list = await _context.Transacoes
-            .Include(t => t.Usuario)
-            .Include(t => t.Categoria)
-            .Select(t => new TransacaoDto
-            {
-                Id = t.Id,
-                Valor = t.Valor,
-                Data = t.Data,
-                Tipo = t.Tipo,
-                CategoriaId = t.CategoriaId,
-                CategoriaNome = t.Categoria != null ? t.Categoria.Nome : null,
-                UsuarioId = t.UsuarioId,
-                UsuarioEmail = t.Usuario != null ? t.Usuario.Email : null,
-                Descricao = t.Descricao
-            })
-            .ToListAsync();
+        try
+        {
+            // Build base query including related data
+            var query = _context.Transacoes
+                .Include(t => t.Usuario)
+                .Include(t => t.Categoria)
+                .AsQueryable();
 
-        return list;
+            // Apply optional filters
+            if (startDate.HasValue)
+            {
+                // Compare from the start of the day (inclusive)
+                var start = startDate.Value.Date;
+                // Ensure UTC kind when comparing against timestamptz columns
+                start = DateTime.SpecifyKind(start, DateTimeKind.Utc);
+                query = query.Where(t => t.Data >= start);
+            }
+
+            if (endDate.HasValue)
+            {
+                // Make end inclusive by comparing to the next day (exclusive)
+                var nextDay = endDate.Value.Date.AddDays(1);
+                // Ensure UTC kind when comparing against timestamptz columns
+                nextDay = DateTime.SpecifyKind(nextDay, DateTimeKind.Utc);
+                query = query.Where(t => t.Data < nextDay);
+            }
+
+            if (categoriaId.HasValue && categoriaId.Value > 0)
+            {
+                query = query.Where(t => t.CategoriaId == categoriaId.Value);
+            }
+
+            var list = await query
+                .Select(t => new TransacaoDto
+                {
+                    Id = t.Id,
+                    Valor = t.Valor,
+                    Data = t.Data,
+                    Tipo = t.Tipo,
+                    CategoriaId = t.CategoriaId,
+                    CategoriaNome = t.Categoria != null ? t.Categoria.Nome : null,
+                    UsuarioId = t.UsuarioId,
+                    UsuarioEmail = t.Usuario != null ? t.Usuario.Email : null,
+                    Descricao = t.Descricao
+                })
+                .ToListAsync();
+
+            return list;
+        }
+        catch (Exception ex)
+        {
+            // Log and return a helpful error in Development, generic in Production
+            _logger.LogError(ex, "Erro ao carregar transações com filtros startDate={StartDate} endDate={EndDate} categoriaId={CategoriaId}", startDate, endDate, categoriaId);
+            if (_env.IsDevelopment())
+            {
+                return Problem(detail: ex.Message, statusCode: 500);
+            }
+            return StatusCode(500, "Erro ao carregar transações");
+        }
     }
 
     [HttpGet("{id}")]
