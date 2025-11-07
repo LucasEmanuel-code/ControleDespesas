@@ -5,8 +5,6 @@
 
 <h3>Usuários</h3>
 
-<button class="btn btn-primary mb-3" @onclick="Create">Criar novo usuário</button>
-
 @if (usuarios is null)
 {
     <p>Carregando...</p>
@@ -48,7 +46,6 @@ else
         usuarios = await Http.GetFromJsonAsync<List<UsuarioDto>>("/api/Usuario");
     }
 
-    void Create() => NavigationManager.NavigateTo("/usuarios/criar");
     void Edit(int id) => NavigationManager.NavigateTo($"/usuarios/editar/{id}");
     void Details(int id) => NavigationManager.NavigateTo($"/usuarios/detalhes/{id}");
 

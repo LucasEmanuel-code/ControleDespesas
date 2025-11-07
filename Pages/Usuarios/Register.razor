@@ -1,0 +1,82 @@
+@page "/register"
+@using System.ComponentModel.DataAnnotations
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject MudBlazor.ISnackbar Snackbar
+
+<h3>Registro de Usuário</h3>
+
+<EditForm Model="model" OnValidSubmit="HandleRegister">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label class="form-label">Nome completo</label>
+        <InputText class="form-control" @bind-Value="model.Nome" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        <InputText class="form-control" @bind-Value="model.Email" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Senha</label>
+        <InputText type="password" class="form-control" @bind-Value="model.Senha" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Confirme a senha</label>
+        <InputText type="password" class="form-control" @bind-Value="confirmSenha" />
+    </div>
+
+    <button class="btn btn-primary" type="submit">Registrar</button>
+    <button class="btn btn-secondary ms-2" type="button" @onclick="Cancel">Cancelar</button>
+</EditForm>
+
+@code {
+    private RegisterModel model = new();
+    private string confirmSenha = string.Empty;
+
+    private async Task HandleRegister()
+    {
+        if (model.Senha != confirmSenha)
+        {
+            Snackbar.Add("As senhas não coincidem.", MudBlazor.Severity.Warning);
+            return;
+        }
+
+        try
+        {
+            var res = await Http.PostAsJsonAsync("api/Usuario/register", model);
+            if (res.IsSuccessStatusCode)
+            {
+                Snackbar.Add("Registro realizado com sucesso.", MudBlazor.Severity.Success);
+                NavigationManager.NavigateTo("/login");
+            }
+            else
+            {
+                var text = await res.Content.ReadAsStringAsync();
+                Snackbar.Add($"Erro: {text}", MudBlazor.Severity.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Erro: {ex.Message}", MudBlazor.Severity.Error);
+        }
+    }
+
+    private void Cancel() => NavigationManager.NavigateTo("/");
+
+    private class RegisterModel
+    {
+        [Required]
+        public string Nome { get; set; } = string.Empty;
+
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; } = string.Empty;
+
+        [Required]
+        [StringLength(100, MinimumLength = 6)]
+        public string Senha { get; set; } = string.Empty;
+    }
+}

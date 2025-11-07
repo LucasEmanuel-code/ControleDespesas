@@ -17,7 +17,14 @@ public class Usuario
 
     [Required(ErrorMessage = "A senha é obrigatória")]
     [StringLength(100, MinimumLength = 6, ErrorMessage = "A senha deve ter entre 6 e 100 caracteres")]
+    // This property stores the hashed password. Do not store plain-text passwords.
     public string Senha { get; set; } = string.Empty;
+
+    // Data de cadastro — preenchida automaticamente ao registrar o usuário
+    public DateTime DataCadastro { get; set; }
+
+    // Status do usuário — ativo (true) ou inativo (false)
+    public bool IsActive { get; set; } = true;
 
     [System.Text.Json.Serialization.JsonIgnore]
     public ICollection<Categoria> Categorias { get; set; } = new List<Categoria>();

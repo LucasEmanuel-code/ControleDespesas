@@ -7,3 +7,19 @@
 Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
+
+
+<button class="btn btn-primary" @onclick="Login">Login</button>
+<button class = "btn btn-primary" @onclick="GoRegister">Register</button>
+@code {
+    [Inject]
+    private NavigationManager NavigationManager { get; set; } = null!;
+
+    private void Login()
+    {
+        NavigationManager.NavigateTo("/login");
+    }
+    
+    private void GoRegister() => NavigationManager.NavigateTo("/register");
+  
+}
