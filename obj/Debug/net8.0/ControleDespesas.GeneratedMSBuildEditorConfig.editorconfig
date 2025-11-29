@@ -49,16 +49,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2F0ZWdvcmlhc1xMaXN0YXJDYXRlZ29yaWFzLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Pages/Counter.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ291bnRlci5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Pages/Edição.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRWRpw6fDo28ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Pages/Index.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Pages/Relatorios/Categorias.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVsYXRvcmlvc1xDYXRlZ29yaWFzLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Pages/Transacoes/CriarTransacao.razor]

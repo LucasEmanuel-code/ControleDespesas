@@ -8,6 +8,8 @@
 
 <button class="btn btn-primary mb-3" @onclick="Create">Criar nova categoria</button>
 
+<button class="btn btn-primary mb-3" @onclick="Relatorio"> Relatorio da Categoria </button>
+
 @if (categorias is null)
 {
     <p>Carregando...</p>
@@ -54,6 +56,7 @@ else
     void Create() => NavigationManager.NavigateTo("/categorias/criar");
     void Edit(int id) => NavigationManager.NavigateTo($"/categorias/editar/{id}");
     void Details(int id) => NavigationManager.NavigateTo($"/categorias/detalhes/{id}");
+    void Relatorio() => NavigationManager.NavigateTo($"/relatorios/categorias");
 
     async Task Delete(int id)
     {

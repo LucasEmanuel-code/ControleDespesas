@@ -1,0 +1,71 @@
+(function () {
+    if (window.chartInterop) return;
+
+    const charts = {};
+
+    function generateColors(n) {
+        const palette = [
+            '#4e79a7', '#f28e2b', '#e15759', '#76b7b2', '#59a14f', '#edc949', '#af7aa1', '#ff9da7', '#9c755f', '#bab0ac'
+        ];
+        const out = [];
+        for (let i = 0; i < n; i++) out.push(palette[i % palette.length]);
+        return out;
+    }
+
+    function renderPieChart(canvasId, labels, values, options) {
+        try {
+            destroyChart(canvasId);
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            const cfg = {
+                type: 'pie',
+                data: {
+                    labels: labels || [],
+                    datasets: [{
+                        data: values || [],
+                        backgroundColor: generateColors((values || []).length)
+                    }]
+                },
+                options: Object.assign({
+                    responsive: true,
+                    plugins: { legend: { position: 'bottom' } }
+                }, options || {})
+            };
+
+            charts[canvasId] = new Chart(ctx, cfg);
+        }
+        catch (e) {
+            console.error('chartInterop.renderPieChart error', e);
+        }
+    }
+
+    function updatePieChart(canvasId, labels, values) {
+        try {
+            const chart = charts[canvasId];
+            if (!chart) return renderPieChart(canvasId, labels, values);
+            chart.data.labels = labels || [];
+            chart.data.datasets[0].data = values || [];
+            chart.update();
+        }
+        catch (e) { console.error('chartInterop.updatePieChart error', e); }
+    }
+
+    function destroyChart(canvasId) {
+        try {
+            const chart = charts[canvasId];
+            if (chart) {
+                chart.destroy();
+                delete charts[canvasId];
+            }
+        }
+        catch (e) { console.error('chartInterop.destroyChart error', e); }
+    }
+
+    window.chartInterop = {
+        renderPieChart: renderPieChart,
+        updatePieChart: updatePieChart,
+        destroyChart: destroyChart
+    };
+})();
