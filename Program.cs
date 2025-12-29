@@ -34,8 +34,21 @@ builder.Services.AddScoped(sp => new System.Net.Http.HttpClient { BaseAddress = 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Login"; // Defina o caminho de login
+        options.LoginPath = "/login"; // Defina o caminho de login
         options.AccessDeniedPath = "/accessdenied"; // Defina o caminho de logout
+        options.Events = new Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationEvents
+        {
+            OnRedirectToLogin = context =>
+            {
+                if (context.Request.Path.StartsWithSegments("/api"))
+                {
+                    context.Response.StatusCode = 401;
+                    return Task.CompletedTask;
+                }
+                context.Response.Redirect(context.RedirectUri);
+                return Task.CompletedTask;
+            }
+        };
     });
 
 builder.Services.AddAuthorization();
@@ -73,14 +86,15 @@ else
     app.UseHsts();
 }
 
-app.UseAuthentication();
-app.UseAuthorization();
 app.UseHttpsRedirection();
 
-app.MapControllers();  // Mapeia as rotas dos controllers
 app.UseStaticFiles();
 app.UseRouting();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();  // Mapeia as rotas dos controllers
 // Se você tiver controllers/api controllers, habilite MapControllers();
 // app.MapControllers();
 

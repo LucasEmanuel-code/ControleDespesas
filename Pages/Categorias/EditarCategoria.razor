@@ -1,4 +1,5 @@
 @page "/categorias/editar/{Id:int}"
+@attribute [Authorize]
 @using System.Net.Http.Json
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
@@ -12,8 +13,27 @@
 
     protected override async Task OnInitializedAsync()
     {
-        categoria = await Http.GetFromJsonAsync<CategoriaDto>($"/api/Categoria/{Id}") ?? new CategoriaDto();
-        usuarios = await Http.GetFromJsonAsync<List<UsuarioDto>>("/api/Usuario");
+        var responseCategoria = await Http.GetAsync($"/api/Categoria/{Id}");
+        if (responseCategoria.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            NavigationManager.NavigateTo("/login");
+            return;
+        }
+        if (responseCategoria.IsSuccessStatusCode)
+        {
+            categoria = await responseCategoria.Content.ReadFromJsonAsync<CategoriaDto>() ?? new CategoriaDto();
+        }
+
+        var responseUsuarios = await Http.GetAsync("/api/Usuario");
+        if (responseUsuarios.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            NavigationManager.NavigateTo("/login");
+            return;
+        }
+        if (responseUsuarios.IsSuccessStatusCode)
+        {
+            usuarios = await responseUsuarios.Content.ReadFromJsonAsync<List<UsuarioDto>>();
+        }
     }
 
     async Task HandleValidSubmit()

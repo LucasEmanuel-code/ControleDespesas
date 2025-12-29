@@ -1,52 +1,22 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">ControleDespesas</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</div>
+﻿@using MudBlazor
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="usuarios">
-                <span class="oi oi-people" aria-hidden="true"></span> Usuários
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="categorias">
-                <span class="oi oi-folder" aria-hidden="true"></span> Categorias
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="transacoes">
-                <span class="oi oi-dollar" aria-hidden="true"></span> Transações
-            </NavLink>
-        </div>
-                <div class="nav-item px-3 mt-3">
-                    <button class="btn btn-link nav-link text-start" @onclick="Logout">
-                        <span class="oi oi-account-logout" aria-hidden="true"></span> Logout
-                    </button>
-                </div>
-    </nav>
-</div>
+<MudNavMenu>
+    <MudNavLink Href="/" Icon="@Icons.Material.Filled.Home" IconColor="Color.Primary">
+        Home
+    </MudNavLink>
+    <MudNavLink Href="/categorias" Icon="@Icons.Material.Filled.Folder" IconColor="Color.Primary">
+        Categorias
+    </MudNavLink>
+    <MudNavLink Href="/transacoes" Icon="@Icons.Material.Filled.AttachMoney" IconColor="Color.Primary">
+        Transações
+    </MudNavLink>
+    <MudDivider Class="my-2" />
+    <MudNavLink Icon="@Icons.Material.Filled.Logout" IconColor="Color.Secondary" OnClick="Logout">
+        Logout
+    </MudNavLink>
+</MudNavMenu>
 
 @code {
-    private bool collapseNavMenu = true;
-
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-    
     [Inject]
     private HttpClient Http { get; set; } = default!;
 
@@ -63,17 +33,19 @@
             var res = await Http.PostAsync("api/Usuario/logout", null);
             if (res.IsSuccessStatusCode)
             {
-                Snackbar.Add("Logout realizado.", MudBlazor.Severity.Success);
+                Snackbar.Add("Logout realizado.", Severity.Success);
                 NavigationManager.NavigateTo("/login");
             }
             else
             {
-                Snackbar.Add("Erro ao efetuar logout.", MudBlazor.Severity.Error);
+                Snackbar.Add("Erro ao efetuar logout.", Severity.Error);
             }
         }
         catch (Exception ex)
         {
-            Snackbar.Add($"Erro ao efetuar logout: {ex.Message}", MudBlazor.Severity.Error);
+            Snackbar.Add($"Erro ao efetuar logout: {ex.Message}", Severity.Error);
         }
     }
 }
+
+   

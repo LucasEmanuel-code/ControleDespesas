@@ -1,4 +1,5 @@
 @page "/categorias"
+@attribute [Authorize]
 @using System.Net.Http.Json
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
@@ -50,7 +51,16 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        categorias = await Http.GetFromJsonAsync<List<CategoriaDto>>("/api/Categoria");
+        var response = await Http.GetAsync("/api/Categoria");
+        if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            NavigationManager.NavigateTo("/login");
+            return;
+        }
+        if (response.IsSuccessStatusCode)
+        {
+            categorias = await response.Content.ReadFromJsonAsync<List<CategoriaDto>>();
+        }
     }
 
     void Create() => NavigationManager.NavigateTo("/categorias/criar");

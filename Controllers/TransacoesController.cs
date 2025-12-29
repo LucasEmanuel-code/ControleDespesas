@@ -2,11 +2,13 @@ using ControleDespesas.Data;
 using ControleDespesas.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ControleDespesas.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class TransacoesController : ControllerBase
 {
     private readonly AppDbContext _context;

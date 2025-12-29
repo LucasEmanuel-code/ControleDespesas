@@ -1,5 +1,5 @@
 (function () {
-    if (window.chartInterop) return;
+    // Removed the early return to allow updating the object
 
     const charts = {};
 
@@ -52,6 +52,38 @@
         catch (e) { console.error('chartInterop.updatePieChart error', e); }
     }
 
+    function renderBarChart(canvasId, labels, values, options) {
+        try {
+            destroyChart(canvasId);
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            const cfg = {
+                type: 'bar',
+                data: {
+                    labels: labels || [],
+                    datasets: [{
+                        data: values || [],
+                        backgroundColor: generateColors((values || []).length)
+                    }]
+                },
+                options: Object.assign({
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }, options || {})
+            };
+
+            charts[canvasId] = new Chart(ctx, cfg);
+        }
+        catch (e) {
+            console.error('chartInterop.renderBarChart error', e);
+        }
+    }
+
     function destroyChart(canvasId) {
         try {
             const chart = charts[canvasId];
@@ -63,9 +95,14 @@
         catch (e) { console.error('chartInterop.destroyChart error', e); }
     }
 
-    window.chartInterop = {
-        renderPieChart: renderPieChart,
-        updatePieChart: updatePieChart,
-        destroyChart: destroyChart
-    };
+    if (!window.chartInterop) {
+        window.chartInterop = {};
+    }
+
+    window.chartInterop.renderPieChart = renderPieChart;
+    window.chartInterop.renderBarChart = renderBarChart;
+    window.chartInterop.updatePieChart = updatePieChart;
+    window.chartInterop.destroyChart = destroyChart;
+
+    console.log('chartInterop loaded', window.chartInterop);
 })();

@@ -1,4 +1,5 @@
 @page "/transacoes/detalhes/{Id:int}"
+@attribute [Authorize]
 @using System.Net.Http.Json
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
@@ -11,7 +12,16 @@
 
     protected override async Task OnInitializedAsync()
     {
-        transacao = await Http.GetFromJsonAsync<TransacaoDto>($"/api/Transacoes/{Id}");
+        var response = await Http.GetAsync($"/api/Transacoes/{Id}");
+        if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            NavigationManager.NavigateTo("/login");
+            return;
+        }
+        if (response.IsSuccessStatusCode)
+        {
+            transacao = await response.Content.ReadFromJsonAsync<TransacaoDto>();
+        }
     }
 
     void Back() => NavigationManager.NavigateTo("/transacoes");

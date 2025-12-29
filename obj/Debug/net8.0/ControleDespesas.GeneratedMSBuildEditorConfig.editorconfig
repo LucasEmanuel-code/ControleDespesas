@@ -77,18 +77,6 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVHJhbnNhY29lc1xMaXN0YXJUcmFuc2Fjb2VzLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Pages/Usuarios/DetalhesUsuario.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXN1YXJpb3NcRGV0YWxoZXNVc3VhcmlvLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Pages/Usuarios/EditarUsuario.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXN1YXJpb3NcRWRpdGFyVXN1YXJpby5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Pages/Usuarios/ListarUsuarios.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXN1YXJpb3NcTGlzdGFyVXN1YXJpb3MucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/sandr/OneDrive/Área de Trabalho/Lucas/ControleDespesas/ControleDespesas/Pages/Usuarios/Login.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXN1YXJpb3NcTG9naW4ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 

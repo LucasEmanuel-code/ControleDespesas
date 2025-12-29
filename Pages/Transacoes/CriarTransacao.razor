@@ -1,4 +1,5 @@
 @page "/transacoes/criar"
+@attribute [Authorize]
 @using System.Net.Http.Json
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
@@ -67,8 +68,27 @@
 
     protected override async Task OnInitializedAsync()
     {
-        usuarios = await Http.GetFromJsonAsync<List<UsuarioDto>>("/api/Usuario");
-        categorias = await Http.GetFromJsonAsync<List<CategoriaDto>>("/api/Categoria");
+        var responseUsuarios = await Http.GetAsync("/api/Usuario");
+        if (responseUsuarios.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            NavigationManager.NavigateTo("/login");
+            return;
+        }
+        if (responseUsuarios.IsSuccessStatusCode)
+        {
+            usuarios = await responseUsuarios.Content.ReadFromJsonAsync<List<UsuarioDto>>();
+        }
+
+        var responseCategorias = await Http.GetAsync("/api/Categoria");
+        if (responseCategorias.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            NavigationManager.NavigateTo("/login");
+            return;
+        }
+        if (responseCategorias.IsSuccessStatusCode)
+        {
+            categorias = await responseCategorias.Content.ReadFromJsonAsync<List<CategoriaDto>>();
+        }
     }
 
     async Task HandleValidSubmit()

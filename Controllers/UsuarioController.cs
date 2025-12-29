@@ -5,11 +5,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ControleDespesas.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class UsuarioController : ControllerBase
 {
     private readonly AppDbContext _context;
@@ -39,6 +41,7 @@ public class UsuarioController : ControllerBase
     }
 
     // Register a new user (hashes password, enforces unique email)
+    [AllowAnonymous]
     [HttpPost("register")]
     public async Task<ActionResult<Usuario>> Register([FromBody] Usuario usuario)
     {
@@ -70,6 +73,7 @@ public class UsuarioController : ControllerBase
     }
 
     // Login: verifies credentials and returns basic user info on success
+    [AllowAnonymous]
     [HttpPost("login")]
     public async Task<ActionResult<object>> Login([FromBody] LoginDto input)
     {
