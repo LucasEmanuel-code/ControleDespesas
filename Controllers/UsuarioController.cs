@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace ControleDespesas.Controllers;
 
@@ -24,19 +25,22 @@ public class UsuarioController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios()
     {
-        return await _context.Usuarios.ToListAsync();
+        var currentUserId = GetCurrentUserId();
+        if (currentUserId == null) return Unauthorized();
+
+        return await _context.Usuarios.Where(u => u.Id == currentUserId.Value).ToListAsync();
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<Usuario>> GetUsuario(int id)
     {
+        var currentUserId = GetCurrentUserId();
+        if (currentUserId == null) return Unauthorized();
+
+        if (id != currentUserId.Value) return Forbid();
+
         var usuario = await _context.Usuarios.FindAsync(id);
-
-        if (usuario == null)
-        {
-            return NotFound();
-        }
-
+        if (usuario == null) return NotFound();
         return usuario;
     }
 
@@ -121,9 +125,11 @@ public class UsuarioController : ControllerBase
         {
             usuario.Senha = _passwordHasher.HashPassword(usuario, usuario.Senha);
         }
+        var currentUserId = GetCurrentUserId();
+        if (currentUserId == null) return Unauthorized();
+        if (currentUserId.Value != id) return Forbid();
 
         _context.Entry(usuario).State = EntityState.Modified;
-
         try
         {
             await _context.SaveChangesAsync();
@@ -141,9 +147,12 @@ public class UsuarioController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUsuario(int id)
     {
+        var currentUserId = GetCurrentUserId();
+        if (currentUserId == null) return Unauthorized();
+        if (currentUserId.Value != id) return Forbid();
+
         var usuario = await _context.Usuarios.FindAsync(id);
-        if (usuario == null)
-            return NotFound();
+        if (usuario == null) return NotFound();
 
         _context.Usuarios.Remove(usuario);
         await _context.SaveChangesAsync();
@@ -164,5 +173,12 @@ public class UsuarioController : ControllerBase
     {
         public string Email { get; set; } = string.Empty;
         public string Senha { get; set; } = string.Empty;
+    }
+
+    private int? GetCurrentUserId()
+    {
+        var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (int.TryParse(id, out var value)) return value;
+        return null;
     }
 }

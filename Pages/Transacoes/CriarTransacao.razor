@@ -31,19 +31,6 @@
         <InputText class="form-control" @bind-Value="transacao.Descricao" />
     </div>
     <div class="mb-3">
-        <label class="form-label">Usuário</label>
-        <select class="form-select" @bind="transacao.UsuarioId">
-            <option value="">-- selecione --</option>
-            @if (usuarios != null)
-            {
-                @foreach (var u in usuarios)
-                {
-                    <option value="@u.Id">@u.Nome (@u.Email)</option>
-                }
-            }
-        </select>
-    </div>
-    <div class="mb-3">
         <label class="form-label">Categoria</label>
         <select class="form-select" @bind="transacao.CategoriaId">
             <option value="">-- selecione --</option>
@@ -63,22 +50,10 @@
 
 @code {
     TransacaoDto transacao = new() { Data = DateTime.Today };
-    List<UsuarioDto>? usuarios;
     List<CategoriaDto>? categorias;
 
     protected override async Task OnInitializedAsync()
     {
-        var responseUsuarios = await Http.GetAsync("/api/Usuario");
-        if (responseUsuarios.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-        {
-            NavigationManager.NavigateTo("/login");
-            return;
-        }
-        if (responseUsuarios.IsSuccessStatusCode)
-        {
-            usuarios = await responseUsuarios.Content.ReadFromJsonAsync<List<UsuarioDto>>();
-        }
-
         var responseCategorias = await Http.GetAsync("/api/Categoria");
         if (responseCategorias.StatusCode == System.Net.HttpStatusCode.Unauthorized)
         {

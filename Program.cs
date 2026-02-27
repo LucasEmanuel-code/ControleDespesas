@@ -5,6 +5,10 @@ using MudBlazor.Services;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
+using Microsoft.Extensions.Http;
+using Microsoft.AspNetCore.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,29 +16,34 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+   
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");    
+
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddControllers()
-    .AddJsonOptions(opts =>
-    {
-        // Prevent JsonSerializer from throwing on cycles between navigation properties
-        opts.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-        // Optional: don't emit null properties
-        opts.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-    });  // Adiciona suporte a controllers
+builder.Services.AddHttpContextAccessor();
 
 // Register HttpClient for Blazor Server components so they can inject HttpClient.
 // Prerendering contexts may not provide NavigationManager, so register a simple
 // fallback HttpClient using a configured base URL. You can override "AppBaseUrl"
 // in appsettings.json or leave the default localhost address.
-builder.Services.AddHttpClient();
-var defaultBase = builder.Configuration.GetValue<string>("AppBaseUrl") ?? "http://localhost:5184";
-builder.Services.AddScoped(sp => new System.Net.Http.HttpClient { BaseAddress = new Uri(defaultBase) });
+builder.Services.AddScoped(sp =>
+{
+    var httpContextAccessor = sp.GetService<IHttpContextAccessor>();
+    var httpContext = httpContextAccessor?.HttpContext;
+    var scheme = httpContext?.Request.Scheme ?? "http";
+    var host = httpContext?.Request.Host.ToString() ?? "localhost:5184";
+    var baseUrl = $"{scheme}://{host}";
+    return new System.Net.Http.HttpClient(new HttpClientHandler
+    {
+        ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+    }) { BaseAddress = new Uri(baseUrl) };
+});
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/login"; // Defina o caminho de login
+        options.LoginPath = "/Login"; // Defina o caminho de login
         options.AccessDeniedPath = "/accessdenied"; // Defina o caminho de logout
         options.Events = new Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationEvents
         {
@@ -84,9 +93,8 @@ else
     // Em produção, manter tratamento de exceções e HSTS
     app.UseExceptionHandler("/Error");
     app.UseHsts();
+    app.UseHttpsRedirection();
 }
-
-app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseRouting();

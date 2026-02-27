@@ -1,17 +1,53 @@
 ﻿@page "/"
-@attribute [Authorize]
+@attribute [AllowAnonymous]
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Controle de Despesas - Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="container mt-5">
+    <div class="row align-items-center">
+        <div class="col-lg-6">
+            <h1 class="display-4 fw-bold mb-3">Controle de Despesas</h1>
+            <p class="lead mb-4">
+                Gerenciador inteligente e fácil de usar para controlar suas receitas e despesas. 
+                Organize suas finanças, acompanhe categorias e tenha uma visão clara do seu saldo.
+            </p>
+            <div class="d-flex gap-3">
+                <button class="btn btn-primary btn-lg" @onclick="Login">
+                    🔐 Fazer Login
+                </button>
+                <button class="btn btn-outline-primary btn-lg" @onclick="GoRegister">
+                    📝 Criar Conta
+                </button>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card shadow-lg">
+                <div class="card-body p-5">
+                    <h5 class="card-title mb-4">Funcionalidades</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <span class="badge bg-success me-2">✓</span>
+                            <strong>Gerenciar Transações</strong> - Registre suas receitas e despesas com facilidade
+                        </li>
+                        <li class="mb-3">
+                            <span class="badge bg-success me-2">✓</span>
+                            <strong>Categorias Personalizadas</strong> - Crie e organize suas próprias categorias
+                        </li>
+                        <li class="mb-3">
+                            <span class="badge bg-success me-2">✓</span>
+                            <strong>Relatórios Visuais</strong> - Acompanhe seus gastos com gráficos intuitivos
+                        </li>
+                        <li class="mb-3">
+                            <span class="badge bg-success me-2">✓</span>
+                            <strong>Dados Seguros</strong> - Suas informações financeiras protegidas e privadas
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
-
-
-<button class="btn btn-primary" @onclick="Login">Login</button>
-<button class = "btn btn-primary" @onclick="GoRegister">Register</button>
 @code {
     [Inject]
     private NavigationManager NavigationManager { get; set; } = null!;
@@ -22,5 +58,5 @@ Welcome to your new app.
     }
     
     private void GoRegister() => NavigationManager.NavigateTo("/register");
-  
 }
+  

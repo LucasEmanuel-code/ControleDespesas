@@ -21,19 +21,6 @@
         <label class="form-label">Descrição</label>
         <InputText class="form-control" @bind-Value="categoria.Descricao" />
     </div>
-    <div class="mb-3">
-        <label class="form-label">Usuário</label>
-        <select class="form-select" @bind="categoria.UsuarioId">
-            <option value="">-- selecione --</option>
-            @if (usuarios != null)
-            {
-                @foreach (var u in usuarios)
-                {
-                    <option value="@u.Id">@u.Nome (@u.Email)</option>
-                }
-            }
-        </select>
-    </div>
 
     <button class="btn btn-primary" type="submit">Criar</button>
     <button class="btn btn-secondary ms-2" type="button" @onclick="Cancel">Cancelar</button>
@@ -41,37 +28,9 @@
 
 @code {
     private Categoria categoria = new();
-    private List<Usuario>? usuarios;
-
-    protected override async Task OnInitializedAsync()
-    {
-        try
-        {
-            var response = await Http.GetAsync("api/Usuario");
-            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-            {
-                NavigationManager.NavigateTo("/login");
-                return;
-            }
-            if (response.IsSuccessStatusCode)
-            {
-                usuarios = await response.Content.ReadFromJsonAsync<List<Usuario>>();
-            }
-        }
-        catch (Exception ex)
-        {
-            Snackbar.Add($"Erro ao carregar usuários: {ex.Message}", Severity.Error);
-        }
-    }
 
     private async Task HandleValidSubmit()
     {
-        if (categoria.UsuarioId == 0)
-        {
-            Snackbar.Add("Por favor, selecione um usuário", Severity.Warning);
-            return;
-        }
-
         try 
         {
             var res = await Http.PostAsJsonAsync("api/Categoria", categoria);

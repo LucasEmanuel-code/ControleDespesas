@@ -3,6 +3,7 @@ using ControleDespesas.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace ControleDespesas.Controllers;
 
@@ -41,11 +42,17 @@ public class TransacoesController : ControllerBase
     {
         try
         {
-            // Build base query including related data
+            // Ensure we have the current user id and build base query including related data
+            var currentUserId = GetCurrentUserId();
+            if (currentUserId == null) return Unauthorized();
+
             var query = _context.Transacoes
                 .Include(t => t.Usuario)
                 .Include(t => t.Categoria)
                 .AsQueryable();
+
+            // Filter by authenticated user
+            query = query.Where(t => t.UsuarioId == currentUserId.Value);
 
             // Apply optional filters
             if (startDate.HasValue)
@@ -103,10 +110,13 @@ public class TransacoesController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<TransacaoDto>> GetTransacao(int id)
     {
+        var currentUserId = GetCurrentUserId();
+        if (currentUserId == null) return Unauthorized();
+
         var t = await _context.Transacoes
             .Include(x => x.Usuario)
             .Include(x => x.Categoria)
-            .Where(x => x.Id == id)
+            .Where(x => x.Id == id && x.UsuarioId == currentUserId.Value)
             .Select(x => new TransacaoDto
             {
                 Id = x.Id,
@@ -145,11 +155,11 @@ public class TransacoesController : ControllerBase
         }
 
         // Validações de integridade referencial: garantir que FK apontem para registros existentes
-        if (!await _context.Usuarios.AnyAsync(u => u.Id == transacao.UsuarioId))
-        {
-            ModelState.AddModelError("UsuarioId", "Usuário não encontrado");
-            return BadRequest(ModelState);
-        }
+        var currentUserId = GetCurrentUserId();
+        if (currentUserId == null) return Unauthorized();
+
+        // Force ownership to the authenticated user
+        transacao.UsuarioId = currentUserId.Value;
 
         if (!await _context.Categorias.AnyAsync(c => c.Id == transacao.CategoriaId))
         {
@@ -239,6 +249,15 @@ public class TransacoesController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
+        var currentUserId = GetCurrentUserId();
+        if (currentUserId == null) return Unauthorized();
+
+        // Ensure ownership: only allow updating if the transaction belongs to current user
+        var existing = await _context.Transacoes.AsNoTracking().FirstOrDefaultAsync(t => t.Id == id);
+        if (existing == null) return NotFound();
+        if (existing.UsuarioId != currentUserId.Value) return Forbid();
+
+        transacao.UsuarioId = currentUserId.Value;
         _context.Entry(transacao).State = EntityState.Modified;
 
         try
@@ -258,13 +277,23 @@ public class TransacoesController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTransacao(int id)
     {
+        var currentUserId = GetCurrentUserId();
+        if (currentUserId == null) return Unauthorized();
+
         var transacao = await _context.Transacoes.FindAsync(id);
-        if (transacao == null)
-            return NotFound();
+        if (transacao == null) return NotFound();
+        if (transacao.UsuarioId != currentUserId.Value) return Forbid();
 
         _context.Transacoes.Remove(transacao);
         await _context.SaveChangesAsync();
 
         return NoContent();
+    }
+
+    private int? GetCurrentUserId()
+    {
+        var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (int.TryParse(id, out var value)) return value;
+        return null;
     }
 }

@@ -13,10 +13,14 @@
     }
 
     function renderPieChart(canvasId, labels, values, options) {
+      console.log('renderPieChart called for', canvasId, 'with labels:', labels, 'values:', values);
         try {
             destroyChart(canvasId);
             const canvas = document.getElementById(canvasId);
-            if (!canvas) return;
+            if (!canvas || !canvas.parentNode) {
+                console.log('Canvas not found or not in DOM for', canvasId);
+                return;
+            }
             const ctx = canvas.getContext('2d');
 
             const cfg = {
@@ -34,7 +38,12 @@
                 }, options || {})
             };
 
-            charts[canvasId] = new Chart(ctx, cfg);
+            try {
+                console.log('Pie chart created for', canvasId);
+                charts[canvasId] = new Chart(ctx, cfg);
+            } catch (chartError) {
+                console.error('Error creating pie chart:', chartError);
+            }
         }
         catch (e) {
             console.error('chartInterop.renderPieChart error', e);
@@ -45,6 +54,10 @@
         try {
             const chart = charts[canvasId];
             if (!chart) return renderPieChart(canvasId, labels, values);
+            if (!chart.canvas || !chart.canvas.parentNode) {
+                delete charts[canvasId];
+                return renderPieChart(canvasId, labels, values);
+            }
             chart.data.labels = labels || [];
             chart.data.datasets[0].data = values || [];
             chart.update();
@@ -56,7 +69,7 @@
         try {
             destroyChart(canvasId);
             const canvas = document.getElementById(canvasId);
-            if (!canvas) return;
+            if (!canvas || !canvas.parentNode) return;
             const ctx = canvas.getContext('2d');
 
             const cfg = {
@@ -77,7 +90,11 @@
                 }, options || {})
             };
 
-            charts[canvasId] = new Chart(ctx, cfg);
+            try {
+                charts[canvasId] = new Chart(ctx, cfg);
+            } catch (chartError) {
+                console.error('Error creating bar chart:', chartError);
+            }
         }
         catch (e) {
             console.error('chartInterop.renderBarChart error', e);
@@ -88,11 +105,19 @@
         try {
             const chart = charts[canvasId];
             if (chart) {
-                chart.destroy();
+                try {
+                    chart.destroy();
+                } catch (destroyError) {
+                    console.error('Error destroying chart:', destroyError);
+                }
                 delete charts[canvasId];
             }
         }
         catch (e) { console.error('chartInterop.destroyChart error', e); }
+    }
+
+    function canvasExists(canvasId) {
+        return !!document.getElementById(canvasId);
     }
 
     if (!window.chartInterop) {
@@ -103,6 +128,7 @@
     window.chartInterop.renderBarChart = renderBarChart;
     window.chartInterop.updatePieChart = updatePieChart;
     window.chartInterop.destroyChart = destroyChart;
+    window.chartInterop.canvasExists = canvasExists;
 
     console.log('chartInterop loaded', window.chartInterop);
 })();
